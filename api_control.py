@@ -10,7 +10,6 @@ def get_one_currency(iso_code):
       currency = parsed["currency"]
       sell = parsed["rates"][0]["ask"]
       buy = parsed["rates"][0]["bid"]
-      asked_currencies['iso_code'] = (currency, sell, buy)
       answer = [response.status_code, iso, currency, sell, buy]
    else:
       answer = [response.status_code]

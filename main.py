@@ -1,98 +1,68 @@
 #-*-coding: utf-8-*-
 import sys
+from PyQt6 import QtWidgets
+from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem
+from mainwindow import Ui_MainWindow
 import api_control
-from PyQt6.QtWidgets import (
-    QApplication,
-    QWidget,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QVBoxLayout,
-    QHBoxLayout,
-    QCompleter,
-    QTableWidget
-)
+
+class Menu (QtWidgets.QMainWindow):
+    def __init__(self):
+        super(Menu, self).__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.formatTable()
+        self.ui.button_choose.clicked.connect(self.choose_clicked)
+        self.ui.button_exit.clicked.connect(self.close)
+
+    def print_currency(self):
+        currency = self.ui.line_currency.text()
+        print(api_control.get_one_currency(currency))
+        self.ui.line_currency.clear()
 
 
-class MainWindow(QWidget):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.setWindowTitle('Qt Signals & Slots')
-        self.setGeometry(100, 100, 320, 210)
-        currency_list = ['usd', 'eur', 'czk', 'aud', 'huf', 'chf']
-        common_currencies = QCompleter(currency_list)
-
-
-        #set grid
-        main_layout = QVBoxLayout()
-        buttons_layout = QHBoxLayout()
-
-        self.setLayout(main_layout)
-
-        #set widgets
-        self.actual_price = QLabel()
-        self.chosen_curr = QLineEdit(self)
-        self.chosen_curr.setMaxLength(3)
-        self.chosen_curr.setCompleter(common_currencies)
-        self.chosen_curr.setPlaceholderText("Enter currency")
-        pb_exit = QPushButton("Exit")
-        pb_choose = QPushButton("Choose")
-
-        #set table
-        self.tab_currency = QTableWidget(self)
-        self.tab_currency.setColumnCount(4)
-        self.tab_currency.setHorizontalHeaderLabels(["ISO", "Currency", "Sell", "Buy"])
-
-        #add objects
-        main_layout.addWidget(self.chosen_curr)
-        main_layout.addWidget(self.actual_price)
-        main_layout.addWidget(self.tab_currency)
-        buttons_layout.addWidget(pb_choose)
-        buttons_layout.addWidget(pb_exit)
-        main_layout.addLayout(buttons_layout)
-        #create signals
-        pb_exit.clicked.connect(MainWindow.exit_clicked)
-        pb_choose.clicked.connect(self.choose_clicked)
-        self.show()
+    def formatTable(self):
+        self.ui.table_data.setColumnCount(4)
+        self.ui.table_data.setHorizontalHeaderLabels(["ISO", "Currency", "Sell", "Buy"])
+        self.ui.table_data.horizontalHeader().setStretchLastSection(True)
+#        self.ui.table_data.horizontalHeader().setSectionResizeMode(QTableWidget.ResizeMode.Stretch)
 
     def choose_clicked(self):
-        currency = api_control.get_one_currency(self.chosen_curr.text())
-        if currency[0] == 404:
-            self.actual_price.setText("Error")
-            return
-        else:
-            self.actual_price.setText("Succes")
+        currency = api_control.get_one_currency(self.ui.line_currency.text())
+        # if currency[0] == 404:
+        #     self.actual_price.setText("Error")
+        #     return
+        #self.actual_price.setText("Succes")
+        new_row = self.ui.table_data.rowCount()
+        self.ui.table_data.insertRow(new_row)
+        self.ui.table_data.setItem(new_row, 0, QTableWidgetItem(currency[1]))
+        self.ui.table_data.setItem(new_row, 1, QTableWidgetItem(currency[2]))
+        self.ui.table_data.setItem(new_row, 2, QTableWidgetItem(str(currency[3])))
+        self.ui.table_data.setItem(new_row, 3, QTableWidgetItem(str(currency[4])))
+        self.ui.line_currency.clear()
 
-
-
-    def exit_clicked():
-        sys.exit()
-
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    # create the main window and display it
-    window = MainWindow()
-
-    # start the event loop
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    window = Menu()
+    window.show()
     sys.exit(app.exec())
 
+main()
 
-    def delete(self):
-        current_row = self.table.currentRow()
-        if current_row < 0:
-            return QMessageBox.warning(self, 'Warning', 'Please select a record to delete')
 
-        button = QMessageBox.question(
-            self,
-            'Confirmation',
-            'Are you sure that you want to delete the selected row?',
-            QMessageBox.StandardButton.Yes |
-            QMessageBox.StandardButton.No
-        )
-        if button == QMessageBox.StandardButton.Yes:
-            self.table.removeRow(current_row)
+    #
+    # def delete(self):
+    #     current_row = self.table.currentRow()
+    #     if current_row < 0:
+    #         return QMessageBox.warning(self, 'Warning', 'Please select a record to delete')
+    #
+    #     button = QMessageBox.question(
+    #         self,
+    #         'Confirmation',
+    #         'Are you sure that you want to delete the selected row?',
+    #         QMessageBox.StandardButton.Yes |
+    #         QMessageBox.StandardButton.No
+    #     )
+    #     if button == QMessageBox.StandardButton.Yes:
+    #         self.table.removeRow(current_row)
+
+#self.line_currency.setCompleter(QtWidgets.QCompleter(["usd", "eur", "chf", "gbp", "jpy", "czk", "dkk", "nok", "sek", "xdr"], self.line_currency))

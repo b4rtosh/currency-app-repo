@@ -30,7 +30,7 @@
         <enum>QLayout::SetDefaultConstraint</enum>
        </property>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_instruct">
          <property name="text">
           <string>Enter currency in ISO format for example &quot;usd&quot;</string>
          </property>
@@ -78,6 +78,16 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_status">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">

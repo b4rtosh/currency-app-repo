@@ -9,6 +9,8 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from api_control import currency_list
+from api_control import Currency
+import re
 
 
 class Ui_DialogConvert(object):
@@ -83,6 +85,7 @@ class Ui_DialogConvert(object):
         self.line_main.setMinimumSize(QtCore.QSize(120, 0))
         self.line_main.setMaximumSize(QtCore.QSize(120, 16777215))
         self.line_main.setObjectName("line_main")
+        self.line_main.setPlaceholderText("Format 'X.XX' or 'XX'")
         self.horizontalLayout_5.addWidget(self.line_main)
         spacerItem3 = QtWidgets.QSpacerItem(80, 20, QtWidgets.QSizePolicy.Policy.MinimumExpanding, QtWidgets.QSizePolicy.Policy.Minimum)
         self.horizontalLayout_5.addItem(spacerItem3)
@@ -123,14 +126,23 @@ class Ui_DialogConvert(object):
         self.label_1.setText(_translate("DialogConvert", "Currency 1"))
         self.label_2.setText(_translate("DialogConvert", "Currency 2"))
         self.label_3.setText(_translate("DialogConvert", "TO"))
-        self.label_result.setText(_translate("DialogConvert", "TextLabel"))
+        self.label_result.setText(_translate("DialogConvert", "Result"))
         self.button_back.setText(_translate("DialogConvert", "Back"))
 
     def sell_clicked(self):
-        print("sell clicked")
+        self.convert(self.combo_main.currentText(), self.combo_result.currentText(), self.line_main.text(), False)
 
     def buy_clicked(self):
-        print("buy clicked")
+        self.convert(self.combo_main.currentText(), self.combo_result.currentText(), self.line_main.text(), True)
+
+    def convert(self, currency1, currency2, amount, choice):
+        if re.search("[0-9]+\.[0-9]+", amount) or re.search("[0-9]+", amount):
+            print("success")
+            result = Currency.convert_currencies(currency1, currency2, float(amount), choice)
+            self.label_result.setText(str(result))
+        else:
+            self.label_error.setText("Wrong amount format")
+
 
 # if __name__ == "__main__":
 #     import sys

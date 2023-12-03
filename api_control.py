@@ -34,3 +34,22 @@ class Currency:
         for i in parsed[0]["rates"]:
             new_currency = Currency(response.status_code, i["code"], i["currency"], i["ask"], i["bid"])
             currency_list.append(new_currency)
+
+    def convert_currencies(d_input, d_output, d_amount, choice): #choice == 1 - sell price, choice == 2 - buy price
+        if d_input != 'PLN' or d_output != 'PLN':
+            for i in currency_list:
+                if i.iso == d_input:
+                    if choice == 0: input_price = i.sell
+                    else: input_price = i.buy
+                if i.iso == d_output:
+                    if choice == 0: output_price = i.sell
+                    else: output_price = i.buy
+        if d_input == 'PLN' and d_output != 'PLN':
+            result = float(d_amount / output_price)
+        elif d_input != 'PLN' and d_output == 'PLN':
+            result = float(d_amount * input_price)
+        elif d_input != 'PLN' and d_output != 'PLN' and d_input != d_output:
+            result = float((input_price * d_amount) / output_price)
+        else:
+            result = d_amount
+        return result

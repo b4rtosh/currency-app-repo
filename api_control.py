@@ -1,7 +1,7 @@
 #-*-coding: utf-8-*-
 import requests
 import json
-
+import matplotlib.pyplot as plt
 global currency_list
 currency_list = []
 
@@ -53,3 +53,20 @@ class Currency:
         else:
             result = d_amount
         return result
+
+    def get_chart_data(iso_code, start_date, end_date):
+        response = requests.get("http://api.nbp.pl/api/exchangerates/rates/a/"+iso_code+"/"+start_date+"/"+end_date+"/")
+        parsed = json.loads(response.text)
+        #add data to list
+        currency_values = []
+        for i in parsed["rates"]:
+            currency_values.append(i["mid"])
+            print(i["mid"])
+        #draw chart
+        plt.plot(currency_values)
+        plt.ylabel("Price")
+        #first day and last day
+        plt.xlabel("Days")
+        #select x axis ticks as first and last day
+        plt.title("Chart for "+iso_code.upper())
+        plt.show()

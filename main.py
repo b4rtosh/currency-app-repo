@@ -7,6 +7,7 @@ from mainwindow import Ui_MainWindow
 from api_control import Currency
 from api_control import currency_list
 from dialogconvert import Ui_DialogConvert
+from dialogcharts import Ui_DialogCharts
 
 class Menu (QtWidgets.QMainWindow):
     def __init__(self):
@@ -16,9 +17,11 @@ class Menu (QtWidgets.QMainWindow):
         self.formatTable()
         self.add_currency("usd")
         self.add_currency("eur")
-        self.ui.button_choose.clicked.connect(self.choose_clicked)
+        self.add_currency("gbp")
+        self.ui.button_choose.clicked.connect(self.choose_clicked) #connecting buttons
         self.ui.button_exit.clicked.connect(self.close)
         self.ui.button_convert.clicked.connect(self.convert_clicked)
+        self.ui.button_charts.clicked.connect(self.charts_clicked)
 
 
     def formatTable(self):
@@ -68,6 +71,12 @@ class Menu (QtWidgets.QMainWindow):
     def choose_clicked(self):
         self.add_currency(self.ui.line_currency.text())
 
+    def charts_clicked(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = Ui_DialogCharts()
+        dialog.ui.setupUi(dialog)
+        dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        dialog.exec()
 
 def main():
     Currency.get_all_currencies()

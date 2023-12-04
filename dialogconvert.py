@@ -109,10 +109,10 @@ class Ui_DialogConvert(object):
         for i in currency_list:
             self.combo_result.addItem(i.iso)
         self.combo_result.addItem("PLN")
-
         for i in currency_list:
             self.combo_main.addItem(i.iso)
         self.combo_main.addItem("PLN")
+
         #connect buttons
         self.button_back.clicked.connect(DialogConvert.close)
         self.button_sell.clicked.connect(self.sell_clicked)
@@ -142,13 +142,3 @@ class Ui_DialogConvert(object):
             self.label_result.setText(str(result))
         else:
             self.label_error.setText("Wrong amount format")
-
-
-# if __name__ == "__main__":
-#     import sys
-#     app = QtWidgets.QApplication(sys.argv)
-#     DialogConvert = QtWidgets.QDialog()
-#     ui = Ui_DialogConvert()
-#     ui.setupUi(DialogConvert)
-#     DialogConvert.show()
-#     sys.exit(app.exec())

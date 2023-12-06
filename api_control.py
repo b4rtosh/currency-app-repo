@@ -2,6 +2,7 @@
 import requests
 import json
 import matplotlib.pyplot as plt
+import os
 global currency_list
 currency_list = []
 
@@ -45,13 +46,13 @@ class Currency:
                     if choice == 0: output_price = i.sell
                     else: output_price = i.buy
         if d_input == 'PLN' and d_output != 'PLN':
-            result = float(d_amount / output_price)
+            result = round(float(d_amount / output_price), 2)
         elif d_input != 'PLN' and d_output == 'PLN':
-            result = float(d_amount * input_price)
+            result = round(float(d_amount * input_price), 2)
         elif d_input != 'PLN' and d_output != 'PLN' and d_input != d_output:
-            result = float((input_price * d_amount) / output_price)
+            result = round(float((input_price * d_amount) / output_price), 2)
         else:
-            result = d_amount
+            result = round(d_amount, 2)
         return result
 
     def get_chart_data(iso_code, start_date, end_date):
@@ -69,4 +70,15 @@ class Currency:
         plt.xlabel("Days")
         #select x axis ticks as first and last day
         plt.title("Chart for "+iso_code.upper())
-        plt.show()
+        project_path = os.getcwd()
+        #save chart
+        if not os.path.exists(project_path+"/charts"):
+            os.mkdir(project_path+"/charts")
+        plt.savefig(project_path+"/charts/"+iso_code+".png")
+        currency_list.clear()
+        #check if chart exists
+        if os.path.isfile(project_path+"/charts/"+iso_code+".png"):
+            return project_path+"/charts/"+iso_code+".png"
+        else:
+            return None
+

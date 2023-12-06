@@ -12,10 +12,15 @@ from PyQt6.QtWidgets import QDateEdit, QDateTimeEdit
 from api_control import currency_list
 from api_control import Currency
 from datetime import date
+from dialogopenchart import Ui_DialogOpenChart
+from PyQt6.QtGui import QPixmap
+
 class Ui_DialogCharts(object):
     def setupUi(self, DialogCharts):
         DialogCharts.setObjectName("DialogCharts")
         DialogCharts.resize(400, 300)
+        DialogCharts.setMaximumSize(QtCore.QSize(400, 300))
+        DialogCharts.setMinimumSize(QtCore.QSize(400, 300))
         self.verticalLayoutWidget = QtWidgets.QWidget(parent=DialogCharts)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 30, 381, 141))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -113,7 +118,17 @@ class Ui_DialogCharts(object):
         start = self.date_edit_start.date().toString("yyyy-MM-dd")
         end = self.date_edit_end.date().toString("yyyy-MM-dd")
         choice = self.combo_choice.currentText().lower()
-        Currency.get_chart_data(choice, start, end)
+        chart_path = Currency.get_chart_data(choice, start, end)
+        if chart_path == None:
+            self.label_choice.setText("Data not found!")
+            return
+        else:
+            new_dialog = QtWidgets.QDialog()
+            new_dialog.ui = Ui_DialogOpenChart()
+            new_dialog.ui.setupUi(new_dialog)
+            new_dialog.ui.label_picture.setPixmap(QPixmap(chart_path))
+            new_dialog.exec()
+
     def changed_start(self):
         self.date_edit_end.setMinimumDate(self.date_edit_start.date())
         if self.date_edit_start.date().year() == date.today().year:

@@ -16,7 +16,9 @@ import re
 class Ui_DialogConvert(object):
     def setupUi(self, DialogConvert):
         DialogConvert.setObjectName("DialogConvert")
-        DialogConvert.resize(400, 311)
+        DialogConvert.resize(400, 300)
+        DialogConvert.setMaximumSize(QtCore.QSize(400, 300))
+        DialogConvert.setMinimumSize(QtCore.QSize(400, 300))
         self.horizontalLayoutWidget = QtWidgets.QWidget(parent=DialogConvert)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 200, 381, 31))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -96,7 +98,7 @@ class Ui_DialogConvert(object):
         self.label_result.setObjectName("label_result")
         self.horizontalLayout_5.addWidget(self.label_result)
         self.button_back = QtWidgets.QPushButton(parent=DialogConvert)
-        self.button_back.setGeometry(QtCore.QRect(300, 280, 80, 18))
+        self.button_back.setGeometry(QtCore.QRect(300, 260, 80, 18))
         self.button_back.setObjectName("button_back")
         self.label_error = QtWidgets.QLabel(parent=DialogConvert)
         self.label_error.setGeometry(QtCore.QRect(140, 170, 121, 20))

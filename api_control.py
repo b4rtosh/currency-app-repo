@@ -6,6 +6,7 @@ import os
 global currency_list
 currency_list = []
 
+
 class Currency:
     def __init__(self, status, iso, name, sell, buy):
         self.status = status
@@ -23,7 +24,7 @@ class Currency:
        response = requests.get("http://api.nbp.pl/api/exchangerates/rates/c/"+iso_code+"/2023-12-01/")
        if response.status_code == 200:
           parsed = json.loads(response.text)
-          new_currency = Currency(response.status_code, parsed["code"], parsed["currency"], parsed["rates"][0]["ask"], parsed["rates"][0]["bid"])
+          new_currency = Currency(response.status_code, parsed["code"], parsed["currency"], round(float(parsed["rates"][0]["ask"]), 2), round(float(parsed["rates"][0]["bid"]),2))
           currency_list.append(new_currency)
        else:
           new_currency = Currency(response.status_code, None, None, None, None)
@@ -33,7 +34,7 @@ class Currency:
         response = requests.get("http://api.nbp.pl/api/exchangerates/tables/c/")
         parsed = json.loads(response.text)
         for i in parsed[0]["rates"]:
-            new_currency = Currency(response.status_code, i["code"], i["currency"], i["ask"], i["bid"])
+            new_currency = Currency(response.status_code, i["code"], i["currency"], round(float(i["ask"]),2), round(float(i["bid"]),2))
             currency_list.append(new_currency)
 
     def convert_currencies(d_input, d_output, d_amount, choice): #choice == 1 - sell price, choice == 2 - buy price
@@ -66,19 +67,22 @@ class Currency:
         #draw chart
         plt.plot(currency_values)
         plt.ylabel("Price")
-        #first day and last day
         plt.xlabel("Days")
-        #select x axis ticks as first and last day
         plt.title("Chart for "+iso_code.upper())
+        #mark start and end date
+        plt.xticks([0, len(currency_values)-1], [start_date, end_date])
+
+        # save chart to file
         project_path = os.getcwd()
-        #save chart
         if not os.path.exists(project_path+"/charts"):
             os.mkdir(project_path+"/charts")
         plt.savefig(project_path+"/charts/"+iso_code+".png")
-        currency_list.clear()
+        currency_values.clear()
         #check if chart exists
         if os.path.isfile(project_path+"/charts/"+iso_code+".png"):
             return project_path+"/charts/"+iso_code+".png"
         else:
             return None
+
+
 

@@ -131,18 +131,8 @@ class Ui_DialogCharts(object):
 
     def changed_start(self):
         self.date_edit_end.setMinimumDate(self.date_edit_start.date())
-        if self.date_edit_start.date().year() == date.today().year:
+        if self.date_edit_start.date().year() == date.today().year or self.date_edit_start.date().year() == date.today().year-1:
             self.date_edit_end.setMaximumDate(date.today())
         else:
             self.date_edit_end.setMaximumDate(self.date_edit_start.date().addYears(1))
             self.date_edit_end.setDate(self.date_edit_start.date().addYears(1))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    DialogCharts = QtWidgets.QDialog()
-    ui = Ui_DialogCharts()
-    ui.setupUi(DialogCharts)
-    DialogCharts.show()
-    sys.exit(app.exec())

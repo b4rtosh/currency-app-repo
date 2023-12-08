@@ -8,6 +8,8 @@ from api_control import Currency
 from api_control import currency_list
 from dialogconvert import Ui_DialogConvert
 from dialogcharts import Ui_DialogCharts
+from dialogalerts import Ui_DialogAlerts
+import alerts_control
 
 class Menu (QtWidgets.QMainWindow):
     def __init__(self):
@@ -22,6 +24,8 @@ class Menu (QtWidgets.QMainWindow):
         self.ui.button_exit.clicked.connect(self.close)
         self.ui.button_convert.clicked.connect(self.convert_clicked)
         self.ui.button_charts.clicked.connect(self.charts_clicked)
+        self.ui.button_alerts.clicked.connect(self.alerts_clicked)
+        self.alert_user()
 
 
     def formatTable(self):
@@ -77,6 +81,40 @@ class Menu (QtWidgets.QMainWindow):
         dialog.ui.setupUi(dialog)
         dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         dialog.exec()
+
+    def alerts_clicked(self):
+        dialog = QtWidgets.QDialog()
+        dialog.ui = Ui_DialogAlerts()
+        dialog.ui.setupUi(dialog)
+        dialog.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        dialog.exec()
+
+    def closeEvent(self, event):
+        button = QtWidgets.QMessageBox.question(
+            self,
+            "Exit",
+            "Are you sure you want to exit?",
+            QtWidgets.QMessageBox.StandardButton.Yes | QtWidgets.QMessageBox.StandardButton.No
+        )
+        if button == QtWidgets.QMessageBox.StandardButton.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
+    def alert_user(self):
+        alerts = alerts_control.make_alerts()
+        if alerts == None:
+            return
+        else:
+            for i in alerts:
+                button = QtWidgets.QMessageBox.question(
+                    self,
+                    "Alert",
+                    "Currency " + i[0] + " is below " + str(i[1]) + "!",
+                    QtWidgets.QMessageBox.StandardButton.Ok
+                )
+                if button == QtWidgets.QMessageBox.StandardButton.Ok:
+                    return
 
 def main():
     Currency.get_all_currencies()

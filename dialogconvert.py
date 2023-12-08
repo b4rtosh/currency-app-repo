@@ -96,6 +96,7 @@ class Ui_DialogConvert(object):
         self.label_result.setMaximumSize(QtCore.QSize(120, 16777215))
         self.label_result.setBaseSize(QtCore.QSize(0, 0))
         self.label_result.setObjectName("label_result")
+        self.label_result.setFont(font)
         self.horizontalLayout_5.addWidget(self.label_result)
         self.button_back = QtWidgets.QPushButton(parent=DialogConvert)
         self.button_back.setGeometry(QtCore.QRect(300, 260, 80, 18))
@@ -108,12 +109,16 @@ class Ui_DialogConvert(object):
         self.retranslateUi(DialogConvert)
         QtCore.QMetaObject.connectSlotsByName(DialogConvert)
 
+        self.combo_result.addItem("PLN")
         for i in currency_list:
             self.combo_result.addItem(i.iso)
-        self.combo_result.addItem("PLN")
+
         for i in currency_list:
             self.combo_main.addItem(i.iso)
         self.combo_main.addItem("PLN")
+    #sort items
+        self.combo_main.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
+        self.combo_result.model().sort(0, QtCore.Qt.SortOrder.AscendingOrder)
 
         #connect buttons
         self.button_back.clicked.connect(DialogConvert.close)

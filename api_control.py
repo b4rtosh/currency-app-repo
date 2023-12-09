@@ -3,6 +3,7 @@ import requests
 import json
 import matplotlib.pyplot as plt
 import os
+import datetime
 global currency_list
 currency_list = []
 
@@ -17,11 +18,12 @@ class Currency:
 
 
     def get_one_currency(iso_code):
+       day = Currency.date()
        #if iso code is in list currency_list
        for i in currency_list:
             if i.iso == iso_code.upper():
                 return i
-       response = requests.get("http://api.nbp.pl/api/exchangerates/rates/c/"+iso_code+"/2023-12-01/")
+       response = requests.get("http://api.nbp.pl/api/exchangerates/rates/c/"+iso_code+"/"+today+"/")
        if response.status_code == 200:
           parsed = json.loads(response.text)
           new_currency = Currency(response.status_code, parsed["code"], parsed["currency"], round(float(parsed["rates"][0]["ask"]), 2), round(float(parsed["rates"][0]["bid"]),2))
@@ -84,5 +86,11 @@ class Currency:
         else:
             return None
 
-
+    def date():
+        date = datetime.date.today()
+        if date.weekday() == 6:
+            date = date - datetime.timedelta(days=2)
+        elif date.weekday() == 5:
+            date = date - datetime.timedelta(days=1)
+        return date.strftime("%Y-%m-%d")
 

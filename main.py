@@ -124,21 +124,3 @@ def main():
     sys.exit(app.exec())
 
 main()
-
-
-    #
-    # def delete(self):
-    #     current_row = self.table.currentRow()
-    #     if current_row < 0:
-    #         return QMessageBox.warning(self, 'Warning', 'Please select a record to delete')
-    #
-    #     button = QMessageBox.question(
-    #         self,
-    #         'Confirmation',
-    #         'Are you sure that you want to delete the selected row?',
-    #         QMessageBox.StandardButton.Yes |
-    #         QMessageBox.StandardButton.No
-    #     )
-    #     if button == QMessageBox.StandardButton.Yes:
-    #         self.table.removeRow(current_row)
-

@@ -18,11 +18,11 @@ def get_alerts():
                 alert = line.split(';')[1]
                 for i in currency_list:
                     if i.iso == iso:
-                        price = i.buy
+                        price = i.sell
                         if float(price) >= float(alert):
                             status = "Above"
                         else:
-                            status = "Below"
+                            status = "Below - BUY!"
                         currency_alerts.append((iso, alert, price, status))
                         break
         return currency_alerts

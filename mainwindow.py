@@ -52,7 +52,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.button_choose)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.label_status = QtWidgets.QLabel(parent=self.verticalLayoutWidget)
-        self.label_status.setText("")
+        self.label_status.setText("Sell - price for which the bank buys / Buy - price for which the bank sells")
         self.label_status.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.label_status.setObjectName("label_status")
         self.verticalLayout.addWidget(self.label_status)
